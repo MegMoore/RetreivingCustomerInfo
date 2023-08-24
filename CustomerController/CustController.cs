@@ -34,6 +34,24 @@ namespace CustomerController
                 throw new Exception($"Insert failed. RA is {rowsAffected}");
             }
         }
+        
+        public void InsertOrder(Order order)
+        {
+            var sql = " INSERT Orders " +
+                " (Id, CustomerId, Date, Description) VALUES " +
+                " (@Id, @CustomerId, @Date, @Description) ";
+            var cmd = new SqlCommand(sql, sqlConnection);
+            cmd.Parameters.AddWithValue("@Id", 0);
+            cmd.Parameters.AddWithValue("@CustomerId", order.CustomerId);
+            cmd.Parameters.AddWithValue("@Date", order.Date);
+            cmd.Parameters.AddWithValue("Description", order.Description);
+            var rowsAffected = cmd.ExecuteNonQuery();
+            if(rowsAffected != 1)
+            {
+                throw new Exception($"Insert failed. RA is {rowsAffected}");
+            }
+
+        }
 
         public void UpdateCustomer(Customer customer) //updating data
         {
@@ -58,6 +76,25 @@ namespace CustomerController
             }
         }
 
+        public void UpdateOrder(Order order)
+        {
+            var sql = " UPDATE Order Set " +
+                " CustomerId = @CustomerId, " +
+                " Date = @Date, " +
+                " Description = @Description, " +
+                " Where Id = @Id; ";
+            var cmd = new SqlCommand(sql, sqlConnection);
+            cmd.Parameters.AddWithValue("@Id", order.Id);
+            cmd.Parameters.AddWithValue("@CustomerId", order.CustomerId);
+            cmd.Parameters.AddWithValue("@Date", order.Date);
+            cmd.Parameters.AddWithValue("@Description", order.Description);
+            var rowsAffected = cmd.ExecuteNonQuery();
+            if (rowsAffected != 1)
+            {
+                throw new Exception($"Update Failed. RA is {rowsAffected}");
+            }
+        }
+
         public void DeleteCustomer(int id)
         {
             var sql = " DELETE Customers " +
@@ -72,6 +109,20 @@ namespace CustomerController
             }
         }
 
+        public void DeleteOrder(int id)
+        {
+            var sql = " DELETE Orders " +
+                " Where Id = @Id;";
+            var cmd = new SqlCommand(sql, sqlConnection);
+            cmd.Parameters.AddWithValue("@Id", id);
+
+            var rowsAffected = cmd.ExecuteNonQuery();
+            if(rowsAffected != 1)
+            {
+                throw new Exception($"Delete Failed. RA are {rowsAffected}");
+            }
+        }
+
         public void FindCustomer(String substr)
         {
 
@@ -83,10 +134,10 @@ namespace CustomerController
             if(!reader.HasRows)
             {
                 reader.Close();
-                return null;
+                return;
             }
             reader.Read();
-            var cust = new Customer;
+            var cust = new Customer();
             cust.Id = Convert.ToInt32(reader["Id"]);
             cust.Name = Convert.ToString(reader["Name"]);
             cust.City = Convert.ToString(reader["City"]);
@@ -94,7 +145,7 @@ namespace CustomerController
             cust.Sales = Convert.ToDecimal(reader["Sales"]);
             cust.Active = Convert.ToBoolean(reader["Active"]);
             reader.Close();
-            return cust;
+            return;
  
 
         }

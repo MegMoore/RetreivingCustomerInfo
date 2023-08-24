@@ -40,14 +40,20 @@ var custCtrl = new CustController(conn);
 //Update Customer
 
 
-List<Customer> customers = custCtrl.FindCustomer("er");
+Customer? custById = custCtrl.InsertOrder(string);
+//Console.WriteLine($"{custById}");
+
+
+
+
+/*
+List<Customer> customers = custCtrl.InsertOrder(Order order );
 foreach (var c in customers)
 {
     Console.WriteLine(c);
 
 }
 
-/*
 custCtrl.DeleteCustomer(43);
 Customer? cust = custCtrl.GetCustomerById(43);
 if(cust == null)
