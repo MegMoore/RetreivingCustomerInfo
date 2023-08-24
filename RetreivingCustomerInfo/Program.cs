@@ -28,17 +28,26 @@ var custCtrl = new CustController(conn);
 
 //var newCust = new Customer
 //{
-  //  Id = 0,
-    //Name = "Acme Mfg",
-    //City = "Mason",
-    //State = "OH",
-    //Sales = 0,
-    //Active = true
+//  Id = 0,
+//Name = "Acme Mfg",
+//City = "Mason",
+//State = "OH",
+//Sales = 0,
+//Active = true
 //};
 //custCtrl.InsertCustomer(newCust);
 
 //Update Customer
 
+
+List<Customer> customers = custCtrl.FindCustomer("er");
+foreach (var c in customers)
+{
+    Console.WriteLine(c);
+
+}
+
+/*
 custCtrl.DeleteCustomer(43);
 Customer? cust = custCtrl.GetCustomerById(43);
 if(cust == null)
@@ -48,7 +57,7 @@ if(cust == null)
 {
     Console.WriteLine(cust);
 }
-
+*/
 //cust.Name = "Acme Man";
 //custCtrl.UpdateCustomer(cust);
 //cust = custCtrl.GetCustomerById(10);
@@ -62,7 +71,7 @@ if(cust == null)
 //List<Customer> customers = custCtrl.GetAllCustomers();
 //foreach (var c in customers)
 //{
-   // Console.WriteLine(c);
+// Console.WriteLine(c);
 //}
 
 
