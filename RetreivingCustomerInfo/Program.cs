@@ -38,15 +38,28 @@ var custOrd = new CustController(conn);
 //};
 //custCtrl.InsertCustomer(newCust);
 
+
+
 //Update Customer
-
-
-List<Order> order = custOrd.FindOrder();
-foreach (var o in order)
+void TestOrdersController(SqlConnection conn)
 {
-    Console.WriteLine(o);
+
+
+    var order = new Order() { Id = 0, Date = DateTime.Now, Description = "Test", CustomerId = 10 };
+
+
+    order.Id = 27;
+    order.CustomerId = 1;
+    custOrd.UpdateOrder(order);
+
+    var orders = custOrd.FindOrder();
+
+
+
+    orders.ForEach(x => Console.WriteLine(x));
 
 }
+
 /*
 
 custCtrl.DeleteCustomer(43);
@@ -79,4 +92,4 @@ if(cust == null)
 /* ---------------------  END CONNECTION  ----------------------- */
 
 // CLOSE CONNECTION
-conn.Close();
+//conn.Close();

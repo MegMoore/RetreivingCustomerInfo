@@ -41,16 +41,23 @@ namespace CustomerController
                 " (Id, CustomerId, Date, Description) VALUES " +
                 " (@Id, @CustomerId, @Date, @Description) ";
             var cmd = new SqlCommand(sql, sqlConnection);
-            cmd.Parameters.AddWithValue("@Id", 0);
-            cmd.Parameters.AddWithValue("@CustomerId", order.CustomerId);
-            cmd.Parameters.AddWithValue("@Date", order.Date);
-            cmd.Parameters.AddWithValue("Description", order.Description);
+            //cmd.Parameters.AddWithValue("@Id", 0);
+            AddSqlParameters(cmd, order);
             var rowsAffected = cmd.ExecuteNonQuery();
             if(rowsAffected != 1)
             {
                 throw new Exception($"Insert failed. RA is {rowsAffected}");
             }
 
+        }
+        public void InserOreder(Order order, string customerCode)
+        {
+            var sql = "Select Id from Customers where Code = @Code;";
+            var cmd = new SqlCommand(sql, sqlConnection);
+            cmd.Parameters.AddWithValue($"@Code", customerCode);
+            var custId = Convert.ToInt32(cmd.ExecuteScalar());
+            order.CustomerId = custId;
+            InsertOrder(order);
         }
 
         public void UpdateCustomer(Customer customer) //updating data
@@ -85,14 +92,20 @@ namespace CustomerController
                 " Where Id = @Id; ";
             var cmd = new SqlCommand(sql, sqlConnection);
             cmd.Parameters.AddWithValue("@Id", order.Id);
-            cmd.Parameters.AddWithValue("@CustomerId", order.CustomerId);
-            cmd.Parameters.AddWithValue("@Date", order.Date);
-            cmd.Parameters.AddWithValue("@Description", order.Description);
+            AddSqlParameters(cmd, order);
             var rowsAffected = cmd.ExecuteNonQuery();
             if (rowsAffected != 1)
             {
                 throw new Exception($"Update Failed. RA is {rowsAffected}");
             }
+        }
+
+        private void AddSqlParameters(SqlCommand cmd, Order order) //must add in the same parameters
+        {
+
+            cmd.Parameters.AddWithValue("@CustomerId", order.CustomerId);
+            cmd.Parameters.AddWithValue("@Date", order.Date);
+            cmd.Parameters.AddWithValue("@Description", order.Description);
         }
 
         public void DeleteCustomer(int id)
@@ -152,7 +165,7 @@ namespace CustomerController
 
         public void FindOrder(String substr)
         {
-            var sql = " SELECT * from Customers Where Name Like '%'+@substr+'%' order by Sales Desc ";
+            var sql = Order.SqlGetAllOrders;
 
             var cmd = new SqlCommand(sql, sqlConnection);
             cmd.Parameters.AddWithValue("@substr", substr);
@@ -185,7 +198,13 @@ namespace CustomerController
                 return null;
             }
             reader.Read();
+            var cust = CreateCustomerFromReader(reader);
+            reader.Close();
+            return cust;
+        }
 
+        private Customer CreateCustomerFromReader(SqlDataReader reader)
+        {
             var cust = new Customer();
             cust.Id = Convert.ToInt32(reader["Id"]);
             cust.Name = Convert.ToString(reader["Name"]);
@@ -193,7 +212,7 @@ namespace CustomerController
             cust.State = Convert.ToString(reader["State"]);
             cust.Sales = Convert.ToDecimal(reader["Sales"]);
             cust.Active = Convert.ToBoolean(reader["Active"]);
-            reader.Close();
+           
             return cust;
         }
 
