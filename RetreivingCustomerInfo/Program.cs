@@ -25,6 +25,7 @@ if(conn.State != System.Data.ConnectionState.Open)
 
 // CREATE INSTANCE OF CUSTOMERS CONTROLLER TO CALL METHODS ON
 var custCtrl = new CustController(conn);
+var custOrd = new CustController(conn);
 
 //var newCust = new Customer
 //{
@@ -40,19 +41,13 @@ var custCtrl = new CustController(conn);
 //Update Customer
 
 
-Customer? custById = custCtrl.InsertOrder(string);
-//Console.WriteLine($"{custById}");
-
-
-
-
-/*
-List<Customer> customers = custCtrl.InsertOrder(Order order );
-foreach (var c in customers)
+List<Order> order = custOrd.FindOrder();
+foreach (var o in order)
 {
-    Console.WriteLine(c);
+    Console.WriteLine(o);
 
 }
+/*
 
 custCtrl.DeleteCustomer(43);
 Customer? cust = custCtrl.GetCustomerById(43);
@@ -74,10 +69,10 @@ if(cust == null)
 //Console.WriteLine($"{custById}");
 
 
-//List<Customer> customers = custCtrl.GetAllCustomers();
-//foreach (var c in customers)
+//List<Order> orders = custOrd.FindOrder();
+//foreach (var o in orders)
 //{
-// Console.WriteLine(c);
+  //  Console.WriteLine(o);
 //}
 
 

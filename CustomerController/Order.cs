@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace CustomerController
 {
-    internal class Order
+    public class Order
     {
-        public int Id { get; set; }
-        public int CustomerId { get; set; }
+        public int? Id { get; set; }
+        public int? CustomerId { get; set; }
         public DateTime Date { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         public override string ToString()
         {

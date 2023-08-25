@@ -150,6 +150,29 @@ namespace CustomerController
 
         }
 
+        public void FindOrder(String substr)
+        {
+            var sql = " SELECT * from Customers Where Name Like '%'+@substr+'%' order by Sales Desc ";
+
+            var cmd = new SqlCommand(sql, sqlConnection);
+            cmd.Parameters.AddWithValue("@substr", substr);
+            var reader = cmd.ExecuteReader();
+            if (!reader.HasRows)
+            {
+                reader.Close();
+                return;
+            }
+            reader.Read();
+            var ord = new Order();
+            ord.Id = Convert.ToInt32(reader["Id"]);
+            //ord.CustomerId = Convert.ToString(reader["CustomerId"]);
+            //ord.Date = Convert.ToString(reader["Date"]);
+            ord.Description = Convert.ToString(reader["Description"]);
+            
+            reader.Close();
+            return;
+        }
+
         public Customer GetCustomerById(int id)
         {
             var sql = "Select * from Customers where Id = @Id";
@@ -201,5 +224,6 @@ namespace CustomerController
 
         }
 
+       
     }
 }
